@@ -1,0 +1,42 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 398a1dad921f53842a451e09c12344f7, type: 3}
+  m_Name: New ReceipeTree
+  m_EditorClassIdentifier: 
+  basicReceipes:
+  - data: {fileID: 11400000, guid: 8fa6b074802f70743944e2d798027fa2, type: 2}
+    children:
+    - data: {fileID: 11400000, guid: 9d5f7ce4a93479944a07dc9d1fdf33b0, type: 2}
+      children: []
+    - data: {fileID: 11400000, guid: cdb8e187a74fb6c41b58010bfb475145, type: 2}
+      children: []
+  - data: {fileID: 11400000, guid: bb92cf72b6067754e8d853fb8e58da70, type: 2}
+    children:
+    - data: {fileID: 11400000, guid: 41d3aa892ab79e049a2cbb35bb20325a, type: 2}
+      children: []
+  _node_serialize_set:
+  - data: {fileID: 11400000, guid: 8fa6b074802f70743944e2d798027fa2, type: 2}
+    children:
+    - data: {fileID: 11400000, guid: 9d5f7ce4a93479944a07dc9d1fdf33b0, type: 2}
+      children: []
+    - data: {fileID: 11400000, guid: cdb8e187a74fb6c41b58010bfb475145, type: 2}
+      children: []
+  - data: {fileID: 11400000, guid: bb92cf72b6067754e8d853fb8e58da70, type: 2}
+    children:
+    - data: {fileID: 11400000, guid: 41d3aa892ab79e049a2cbb35bb20325a, type: 2}
+      children: []
+  - data: {fileID: 11400000, guid: 9d5f7ce4a93479944a07dc9d1fdf33b0, type: 2}
+    children: []
+  - data: {fileID: 11400000, guid: cdb8e187a74fb6c41b58010bfb475145, type: 2}
+    children: []
+  - data: {fileID: 11400000, guid: 41d3aa892ab79e049a2cbb35bb20325a, type: 2}
+    children: []
