@@ -171,8 +171,6 @@ Unity의 ScriptableRendererFeature 기능을 통해 Pixelize.shader를 Postproce
 
 _<Assets/Shader/Pixelize/Pixelize.shader>_
 
-Outline은 Sobel필터를 통한 가장자리 검출 알고리즘을 SceneDepth Texture에 사용하여 구현했으며, Scene의 도트 느낌을 최대한 주기 위하여 Orthonormal 투영 카메라를 사용하므로 보다 깔끔한 Outline을 위해 SceneNormal Texture는 Outline에서 사용하지 않았습니다. Pixelize는 전체 화면의 종횡비를 받아 설정한 크기의 Block으로 구획화하고, 각 블럭의 픽셀들의 색을 Gaussian/Box 블러링하는 방식으로 구현했습니다.
-
 ![Pixelizeb_a](https://github.com/user-attachments/assets/597aadc0-d09e-45ad-9b04-7b5737fd647a)
 
 ## 2.에셋 구조 제작
