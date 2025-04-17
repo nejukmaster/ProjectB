@@ -67,51 +67,10 @@ Unity의 ScriptableRendererFeature 기능을 통해 Pixelize.shader를 Postproce
     
                 #define E 2.71828182846
     
-                void Compare(inout float depthOutline, inout float normalOutline,float2 uv) {
-                    //float3 neighborNormal = SampleSceneNormals(uv + _BlockSize.xy * offset);
-                    //float neighborDepth = SampleSceneDepth(uv + _BlockSize.xy * offset);
-    
-                    float3x3 verticalOutlineConv = {1,0,-1,
-                                                    2,0,-2,
-                                                    1,0,-1};
-                    float3x3 horizontalOutlineConv = {1,2,1,
-                                                    0,0,0,
-                                                    -1,-2,-1};
-    
-                    float depthDifferency_vert = 0;
-    
-                    for(int i = 0; i < 9; i ++){
-                        int x = i/3;
-                        int y = i%3;
-    
-                        depthDifferency_vert += verticalOutlineConv[x][y] * SampleSceneDepth(uv + _BlockSize.xy * float2(x-2,y-2));
-                    }
-    
-                    depthDifferency_vert = abs(depthDifferency_vert);
-    
-                    float depthDifferency_horizon = 0;
-    
-                    for(int i = 0; i < 9; i ++){
-                        int x = i/3;
-                        int y = i%3;
-    
-                        depthDifferency_horizon += horizontalOutlineConv[x][y] * SampleSceneDepth(uv + _BlockSize.xy * float2(x-2,y-2));
-                    }
-    
-                    depthDifferency_horizon = abs(depthDifferency_horizon);
-    
-                    //float3 normalDifference = baseNormal - neighborNormal;
-                    //normalDifference = normalDifference.r + normalDifference.g + normalDifference.b;
-                    //normalOutline = normalOutline + normalDifference;
-    
-                    depthOutline = depthDifferency_horizon + depthDifferency_vert / 2;
-                }
-    
                 half4 frag(Varyings IN) : SV_TARGET
                 {
                     float2 blockPos = floor(IN.uv * _BlockCount);
                     float2 blockCenter = blockPos * _BlockSize + _HalfBlockSize;
-    
                     half4 tex = 0.0;
     
                     #if GAUSS
@@ -139,28 +98,6 @@ Unity의 ScriptableRendererFeature 기능을 통해 Pixelize.shader를 Postproce
                             }
                     }
                     tex = tex/sum;
-                    #endif
-                    
-                    #if OUTLINE
-                        float3 normal = SampleSceneNormals(blockCenter);
-                        float depth = SampleSceneDepth(blockCenter);
-                        float normalDifference = 0;
-                        float depthDifference = 0;
-    
-                        Compare(depthDifference, normalDifference, blockCenter);
-    
-                        //normalDifference = normalDifference * _NormalMult;
-                        //normalDifference = saturate(normalDifference);
-                        //normalDifference = pow(normalDifference, _NormalBias);
-    
-                        depthDifference = depthDifference * _DepthMult;
-                        depthDifference = saturate(depthDifference);
-                        depthDifference = pow(depthDifference, _DepthBias);
-    
-                        float outline = depthDifference;
-    
-                        float4 color = lerp(tex, _OutlineColor, outline);
-                        return color;
                     #endif
                     return tex;
                 }
