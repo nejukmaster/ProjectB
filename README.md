@@ -6,6 +6,7 @@ ProjectB
 
 1.3DtoPixelGraphic
 3D화면을 픽셀 그래픽으로 바꾸는 작업을 진행
+
   public class PixelizePass : ScriptableRenderPass
   {
   ...
