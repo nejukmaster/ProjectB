@@ -3,8 +3,9 @@ ProjectB
 3D 농장 경영 시뮬레이션 게임 포트폴리오
 -----------------------------
 
-[작동영상]
+https://youtu.be/cdJTnnvfRNw
 
+_<작동 영상>_
 
 ## 1.Rendering
 
