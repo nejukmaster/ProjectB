@@ -108,6 +108,8 @@ Unity의 ScriptableRendererFeature 기능을 통해 Pixelize.shader를 Postproce
 
 _<Assets/Shader/Pixelize/Pixelize.shader>_
 
+Pixelize 쉐이더는 화면의 종횡비를 통해 전체 화면을 설정한 크기의 블럭으로 나누고, 블럭안의 각 픽셀을 Gaussian/Box 블러링하여 도트 그래픽을 구현합니다.
+
 ![Pixelizeb_a](https://github.com/user-attachments/assets/597aadc0-d09e-45ad-9b04-7b5737fd647a)
 
 ## 2.에셋 구조 제작
