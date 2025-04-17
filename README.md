@@ -1,15 +1,15 @@
 ProjectB
 ===========
-3D 농장 경영 시뮬레이션 게임 포트폴리오
+3D Farm Management Simulation Game Portfolio
 -----------------------------
 
 https://youtu.be/cdJTnnvfRNw
 
-_<작동 영상>_
+_<Gameplay Video>_
 
 ## 1.Rendering
 
-3D화면을 픽셀 그래픽으로 바꾸는 작업을 진행
+I have converted the 3D visuals into pixel graphics.
 
     public class PixelizePass : ScriptableRenderPass
     {
@@ -55,7 +55,7 @@ _<Assets/Scripts/PixelizePass.cs>_
 
 _<Assets/Scripts/PixelizeFeature.cs>_
 
-Unity의 ScriptableRendererFeature 기능을 통해 Pixelize.shader를 Postprocessing으로 적용합니다
+The Pixelize.shader is applied as a post-processing effect using Unity's ScriptableRendererFeature functionality.
 
     Shader"Hidden/Pixelize"
     {
@@ -109,13 +109,13 @@ Unity의 ScriptableRendererFeature 기능을 통해 Pixelize.shader를 Postproce
 
 _<Assets/Shader/Pixelize/Pixelize.shader>_
 
-Pixelize 쉐이더는 화면의 종횡비를 통해 전체 화면을 설정한 크기의 블럭으로 나누고, 블럭안의 각 픽셀을 Gaussian/Box 블러링하여 도트 그래픽을 구현합니다.
+The Pixelize shader divides the full screen into blocks of a specified size based on the screen’s aspect ratio. Each pixel within a block is then blurred using either a Gaussian or Box blur to create a pixel art-style visual effect.
 
 ![Pixelizeb_a](https://github.com/user-attachments/assets/597aadc0-d09e-45ad-9b04-7b5737fd647a)
 
-## 2.에셋 구조 제작
+## 2.Asset Structure Design
 
-ScriptableObject를 통해 농작물, 레시피등 오브젝트들을 모듈화하였습니다.
+Objects such as crops and recipes have been modularized using ScriptableObjects.
 
 ### 2.1 GrindAsset & GrindManager
 
@@ -144,7 +144,7 @@ ScriptableObject를 통해 농작물, 레시피등 오브젝트들을 모듈화�
     
 _<Assets/Scripts/LevelObject/FarmingObject/GrindAsset.cs>_
 
-GrindAsset은 각 곡물의 화면에 표시될 Mesh, Material과 곡물을 수확했을 때 들어올 ItemType, 곡물이 자라는데 걸리는 시간을 저장하고 있는 ScriptableObject입니다.
+The GrindAsset is a ScriptableObject that stores information for each type of grain, including the Mesh and Material used for its visual representation, the ItemType obtained upon harvesting, and the time required for the grain to grow.
 
     namespace ProjectB
     {
@@ -157,7 +157,7 @@ GrindAsset은 각 곡물의 화면에 표시될 Mesh, Material과 곡물을 수�
     
 _<Assets/Scripts/LevelObject/FarmingObject/GrindManager.cs>_
 
-GrindManager는 게임에 사용되는 모든 곡물의 GrindAsset 객체를 담고있는 ScriptableObject입니다.
+The GrindManager is a ScriptableObject that contains all the GrindAsset objects used in the game.
 
 ### 2-2.Receipe & ReceipeTree
 
@@ -178,7 +178,7 @@ GrindManager는 게임에 사용되는 모든 곡물의 GrindAsset 객체를 담
     
 _<Assets/Scripts/System/Cooking/Receipe.cs>_
 
-Receipe는 레스토랑 경영 시스템에서 음식을 만들기 위해 필요하며, 재료, 결과물, 요리시간, 필요한 조리도구, 활성화 여부를 담고있는 ScriptableObject입니다.
+The Recipe is a ScriptableObject used in the restaurant management system to define dishes. It contains the required ingredients, resulting product, cooking time, necessary kitchen tools, and whether the recipe is currently active.
 
     namespace ProjectB
     {
@@ -206,15 +206,16 @@ Receipe는 레스토랑 경영 시스템에서 음식을 만들기 위해 필요
 
 _<Assets/Scripts/System/ReceipeTree.cs>_
 
-ReceipeTree는 각 레시피들의 계층구조를 나타냅니다. 하위 레시피를 해금하고 싶으면, 그에 맞는 상위 레시피가 활성화되어 있어야합니다. ReceipeTree는 ReceipeTreeNode객체를 요소로 가지며, 게임 시작시 기본제공될 Receipe인 basicReceipes와 모든 ReceipeTreeNode들을 직렬화 하기위한 _node_Serialize_set 리스트를 가집니다. 기본적으로 ReceipeTree의 탐색은 BFS 알고리즘을 통하며, 각 탐색마다 호출될 수 있는 elementFindCallback을 파라미터로 제공합니다.
+The RecipeTree represents the hierarchical structure of all recipes. To unlock a high-tier recipe, its corresponding parent recipe must be activated. The RecipeTree contains a RecipeTreeNode objects as its elements. It also includes the basicRecipes, which are the default recipes provided at the start of the game, and the _node_Serialize_set list used to serialize all RecipeTreeNode instances.
+By default, the RecipeTree is searched using the BFS algorithm. During searching, an elementFindCallback can be provided to define actions to be executed at each node.
 
-또한 ReceipeTree는 용이한 수정을 위한 GraphView를 제공합니다.
+The RecipeTree also provides a GraphView interface to allow for easy editing and visualization of the recipe hierarchy.
 
 ![image](https://github.com/user-attachments/assets/ab534cf0-2c47-46f0-8c62-3beed4a13d1b)
 
 _<Assets/Scripts/Editor/Graph/ReceipeTreeGraph>_
 
-이를 통해 ReceipeTree 객체를 편하고 직관적으로 디자인할 수 있습니다.
+This allows the RecipeTree object to be designed in a convenient and intuitive manner.
 
 ![image](https://github.com/user-attachments/assets/59d74371-d494-42d5-9058-04408ec18c86)
 
@@ -222,11 +223,11 @@ _<Assets/Scripts/Editor/Graph/ReceipeTreeGraph/ReceipeTreeGraphWindow.cs>_
 
 ## 3.Logic 설계
 
-시뮬레이션 장르 특성상 복잡한 로직을 표현해야 하는 경우가 많으므로, 최대한 코드간의 독립성을 유지하며, 체계적이게 프로젝트를 관리하려고 하였습니다.
+Due to the nature of simulation games, complex logic often needs to be implemented. Therefore, I aimed to manage the project systematically while maintaining independence between code modules.
 
 ### 3.1 DayCycleSystem
 
-게임의 한 주기는 1일이며, 이를 DayCycleSystem Singletone 객체가 관리합니다. 
+One cycle of the game represents a single day, and this is managed by the DayCycleSystem singleton object.
 
     namespace ProjectB
     {
@@ -261,8 +262,6 @@ _<Assets/Scripts/Editor/Graph/ReceipeTreeGraph/ReceipeTreeGraphWindow.cs>_
             ...
     
             float dayCycleSec = 0;
-    
-            //"하루" 동안 발생가능한 이벤트들을 저장합니다.
             List<DayTimeEvent> dayTimeEventManager = new List<DayTimeEvent>();
     
             void Start()
@@ -295,7 +294,7 @@ _<Assets/Scripts/Editor/Graph/ReceipeTreeGraph/ReceipeTreeGraphWindow.cs>_
     
 _<Assets/Scripts/System/DayCycleSystem.cs>_
 
-DayCycleSystem은 가장 먼저 활성화되어 다른 System으로부터 DayTimeEvent를 등록받습니다. DayTimeEvent는 하루동안 일어나는 이벤트의 일어날 시기, 확률, 최대 발생 횟수, 작동할 Delegate를 담고있는 객체입니다.
+The DayCycleSystem is activated first and receives DayTimeEvents registered from other systems. A DayTimeEvent is an object that contains the scheduled time of occurrence, probability, maximum number of occurrences per day, and the delegate to be executed when triggered.
 
 ### 3.2 InteractiveObject
 
@@ -339,7 +338,7 @@ DayCycleSystem은 가장 먼저 활성화되어 다른 System으로부터 DayTim
 
 _<Assets/Scripts/LevelObject/InteractableObject.cs>_
 
-InteractableObject는 Player가 상호작용할 수 있는 오브젝트들의 최상위 클래스입니다. InteractionParams는 상호작용시 Progressbar를 사용할지 여부를 담습니다. 또한 상호작용이 끝난후 호출될 InteractCallBack과 상호작용 키를 눌렀을 때 즉시 호출되는 InteractPreprocess 추상메서드를 가집니다.
+InteractableObject is the base class for all objects that the player can interact with. It uses an InteractionParams object to determine whether a progress bar should be displayed during interaction. Additionally, it has two abstract methods: InteractPreprocess, which is called immediately when the interaction key is pressed, and InteractCallback, which is invoked after the interaction is completed.
 
 ![image](https://github.com/user-attachments/assets/8ad9729e-2c67-4ece-8969-e8d338cc7f47)
 
@@ -381,7 +380,7 @@ _<Interaction Progress Bar>_
 
 _<Assets/Scripts/System/Inventory/ItemStack.cs>_
 
-ItemStack 클래스는 게임 내에서 생성된 아이템의 개수와 종류를 담는 객체입니다. ItemType은 아이템의 종류를 표현하는 enum클래스로, Extension을 가집니다.
+The ItemStack class represents an object that holds both the quantity and type of items generated within the game. The ItemType is an enum class that defines the various types of items and includes extensions for additional functionality.
 
     namespace ProjectB
     {
@@ -401,4 +400,4 @@ ItemStack 클래스는 게임 내에서 생성된 아이템의 개수와 종류�
     
 _<Assets/Scripts/System/Inventory/Inventory.cs>_
 
-Inventory 클래스는 ItemStack을 담는 List를 상속받습니다. Inventory 클래스에는 인벤토리가 업데이트 되었을때 호출될 함수를 등록할 수 있습니다.
+The Inventory class inherits from a List of ItemStack objects. It allows functions to be registered that will be called whenever the inventory is updated.
