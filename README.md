@@ -6,7 +6,7 @@ ProjectB
 [작동영상]
 
 
-#1.Rendering
+## 1.Rendering
 
 3D화면을 픽셀 그래픽으로 바꾸는 작업을 진행
 
@@ -175,11 +175,11 @@ Outline은 Sobel필터를 통한 가장자리 검출 알고리즘을 SceneDepth 
 
 ![Pixelizeb_a](https://github.com/user-attachments/assets/597aadc0-d09e-45ad-9b04-7b5737fd647a)
 
-##2.에셋 구조 제작
+## 2.에셋 구조 제작
 
 ScriptableObject를 통해 농작물, 레시피등 오브젝트들을 모듈화하였습니다.
 
-###2.1 GrindAsset & GrindManager
+### 2.1 GrindAsset & GrindManager
 
     namespace ProjectB
     {
@@ -221,7 +221,7 @@ _<Assets/Scripts/LevelObject/FarmingObject/GrindManager.cs>_
 
 GrindManager는 게임에 사용되는 모든 곡물의 GrindAsset 객체를 담고있는 ScriptableObject입니다.
 
-###2-2.Receipe & ReceipeTree
+### 2-2.Receipe & ReceipeTree
 
     namespace ProjectB
     {
@@ -282,11 +282,11 @@ _<Assets/Scripts/Editor/Graph/ReceipeTreeGraph>_
 
 _<Assets/Scripts/Editor/Graph/ReceipeTreeGraph/ReceipeTreeGraphWindow.cs>_
 
-##3.Logic 설계
+## 3.Logic 설계
 
 시뮬레이션 장르 특성상 복잡한 로직을 표현해야 하는 경우가 많으므로, 최대한 코드간의 독립성을 유지하며, 체계적이게 프로젝트를 관리하려고 하였습니다.
 
-###3.1 DayCycleSystem
+### 3.1 DayCycleSystem
 
 게임의 한 주기는 1일이며, 이를 DayCycleSystem Singletone 객체가 관리합니다. 
 
@@ -359,7 +359,7 @@ _<Assets/Scripts/System/DayCycleSystem.cs>_
 
 DayCycleSystem은 가장 먼저 활성화되어 다른 System으로부터 DayTimeEvent를 등록받습니다. DayTimeEvent는 하루동안 일어나는 이벤트의 일어날 시기, 확률, 최대 발생 횟수, 작동할 Delegate를 담고있는 객체입니다.
 
-###3.2 InteractiveObject
+### 3.2 InteractiveObject
 
     namespace ProjectB
     {
@@ -407,7 +407,7 @@ InteractableObject는 Player가 상호작용할 수 있는 오브젝트들의 �
 
 <Interaction Progress Bar>
 
-###3.3 Inventory
+### 3.3 Inventory
 
     namespace ProjectB
     {
