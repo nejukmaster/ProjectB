@@ -175,7 +175,7 @@ Outline은 Sobel필터를 통한 가장자리 검출 알고리즘을 SceneDepth 
 
 2.에셋 구조 제작
 
-ScriptableObject를 통해 농작물, 레시피, 손님 오브젝트들을 모듈화하였습니다.
+ScriptableObject를 통해 농작물, 레시피등 오브젝트들을 모듈화하였습니다.
 
 2.1 GrindAsset & GrindManager
 
@@ -271,14 +271,194 @@ ReceipeTree는 각 레시피들의 계층구조를 나타냅니다. 하위 레�
 또한 ReceipeTree는 용이한 수정을 위한 GraphView를 제공합니다.
 
 ![image](https://github.com/user-attachments/assets/ab534cf0-2c47-46f0-8c62-3beed4a13d1b)
+
 <Assets/Scripts/Editor/Graph/ReceipeTreeGraph>
 
 이를 통해 ReceipeTree 객체를 편하고 직관적으로 디자인할 수 있습니다.
 
 ![image](https://github.com/user-attachments/assets/59d74371-d494-42d5-9058-04408ec18c86)
+
 <Assets/Scripts/Editor/Graph/ReceipeTreeGraph/ReceipeTreeGraphWindow.cs>
 
-
-    
-
 3.Logic 설계
+
+시뮬레이션 장르 특성상 복잡한 로직을 표현해야 하는 경우가 많으므로, 최대한 코드간의 독립성을 유지하며, 체계적이게 프로젝트를 관리하려고 하였습니다.
+
+3.1 DayCycleSystem
+
+게임의 한 주기는 1일이며, 이를 DayCycleSystem Singletone 객체가 관리합니다. 
+
+    namespace ProjectB
+    {
+        public enum DayTime
+        {
+            MORNING,
+            AFTERNOON,
+            EVENING,
+            NIGHT
+        }
+    
+        public class DayTimeEvent
+        {
+            public HashSet<DayTime> encounterDayTime;
+            public float encounterProbability;
+            public int maxEncounterOnDay;
+            public Action action;
+    
+            public int encounterNum = 0;
+            public bool enabled = true;
+    
+            public DayTimeEvent(HashSet<DayTime> encounterDayTime, float encounterProbability, int maxEncounterOnDay, Action action)
+            {
+                ...
+            }
+        }
+        public class DayCycleSystem : MonoBehaviour
+        {
+            public static DayCycleSystem instance;
+            public DayTime dayTime = DayTime.MORNING;
+            
+            ...
+    
+            float dayCycleSec = 0;
+    
+            //"하루" 동안 발생가능한 이벤트들을 저장합니다.
+            List<DayTimeEvent> dayTimeEventManager = new List<DayTimeEvent>();
+    
+            void Start()
+            {
+                instance = this;
+                InitializeDayTime();
+            }
+    
+            // Update is called once per frame
+            void Update()
+            {
+                ...
+            }
+    
+            public void InitializeDayTime()
+            {
+                dayTime = DayTime.MORNING;
+                dayCycleSec = oneDaySec;
+                foreach(DayTimeEvent e in dayTimeEventManager)
+                {
+                    e.encounterNum = 0;
+                }
+            }
+            public void RegisterDayTimeEvent(DayTimeEvent dayTimeEvent)
+            {
+                dayTimeEventManager.Add(dayTimeEvent);
+            }
+        }
+    }
+    
+<Assets/Scripts/System/DayCycleSystem.cs>
+
+DayCycleSystem은 가장 먼저 활성화되어 다른 System으로부터 DayTimeEvent를 등록받습니다. DayTimeEvent는 하루동안 일어나는 이벤트의 일어날 시기, 확률, 최대 발생 횟수, 작동할 Delegate를 담고있는 객체입니다.
+
+3.2 InteractiveObject
+
+    namespace ProjectB
+    {
+        [System.Serializable]
+        public class InteractionParams
+        {
+            [SerializeField] public bool bUseProgression;
+            [SerializeField] public float progressionTime;
+            [SerializeField] public float waitTime;
+        }
+        public abstract class InteractableObject : MonoBehaviour
+        {
+            public InteractionParams interactionParams;
+            public bool bNeedItem = false;
+            public HashSet<ItemType> InteractItems = new HashSet<ItemType>();
+    
+            [SerializeField] List<ItemType> InteractItems_inspector;
+    
+            ...
+    
+            public void OnInteract(PlayerController playerController)
+            {
+                if (InteractItems.Contains(playerController.GetCurrentItem().GetType()) || !bNeedItem)
+                {
+                    MainUI.instance.ShowInteractionProgression(interactionParams.bUseProgression,
+                                                                interactionParams.progressionTime,
+                                                                interactionParams.waitTime,
+                                                                () => { InteractCallback(playerController); },
+                                                                () => { InteractPreprocess(playerController); });
+                }
+            }
+            
+            ...
+            
+            public abstract void InteractCallback(PlayerController playerController);
+            public abstract void InteractPreprocess(PlayerController playerController);
+        }
+    }
+
+<Assets/Scripts/LevelObject/InteractableObject.cs>
+
+InteractableObject는 Player가 상호작용할 수 있는 오브젝트들의 최상위 클래스입니다. InteractionParams는 상호작용시 Progressbar를 사용할지 여부를 담습니다. 또한 상호작용이 끝난후 호출될 InteractCallBack과 상호작용 키를 눌렀을 때 즉시 호출되는 InteractPreprocess 추상메서드를 가집니다.
+
+![image](https://github.com/user-attachments/assets/8ad9729e-2c67-4ece-8969-e8d338cc7f47)
+
+<Interaction Progress Bar>
+
+3.3 Inventory
+
+    namespace ProjectB
+    {
+        public enum ItemType
+        {
+            NONE,
+            STEAK,
+            WATER_BOTTLE,
+            HOE,
+            WHEAT_SEED,
+            WHEAT,
+            CORN_SEED,
+            CORN
+        }
+        public static class ItemTypeExtensions
+        {
+            ...
+        }
+    
+        [System.Serializable]
+        public class ItemStack
+        {
+            [SerializeField] ItemType type;
+            [SerializeField] int Amount;
+    
+            public ItemStack(ItemType type, int amount)
+            {
+                ...
+            }
+            ...
+        }
+    }
+
+<Assets/Scripts/System/Inventory/ItemStack.cs>
+
+ItemStack 클래스는 게임 내에서 생성된 아이템의 개수와 종류를 담는 객체입니다. ItemType은 아이템의 종류를 표현하는 enum클래스로, Extension을 가집니다.
+
+    namespace ProjectB
+    {
+        public class Inventory : List<ItemStack>
+        {
+            public Action onInventoryUpdate;
+            int size;
+    
+            public Inventory(int size) : base()
+            {
+                this.size = size;
+            }
+    
+            ...
+        }
+    }
+    
+<Assets/Scripts/System/Inventory/Inventory.cs>
+
+Inventory 클래스는 ItemStack을 담는 List를 상속받습니다. Inventory 클래스에는 인벤토리가 업데이트 되었을때 호출될 함수를 등록할 수 있습니다.
