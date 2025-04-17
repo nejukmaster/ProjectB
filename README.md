@@ -405,7 +405,7 @@ InteractableObject는 Player가 상호작용할 수 있는 오브젝트들의 �
 
 ![image](https://github.com/user-attachments/assets/8ad9729e-2c67-4ece-8969-e8d338cc7f47)
 
-<Interaction Progress Bar>
+_<Interaction Progress Bar>_
 
 ### 3.3 Inventory
 
