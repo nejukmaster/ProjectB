@@ -6,7 +6,7 @@ ProjectB
 [작동영상]
 
 
-##1.Rendering
+#1.Rendering
 
 3D화면을 픽셀 그래픽으로 바꾸는 작업을 진행
 
