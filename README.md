@@ -170,6 +170,7 @@ Unity의 ScriptableRendererFeature 기능을 통해 Pixelize.shader를 Postproce
 <Assets/Shader/Pixelize/Pixelize.shader>
 
 Outline은 Sobel필터를 통한 가장자리 검출 알고리즘을 SceneDepth Texture에 사용하여 구현했으며, Scene의 도트 느낌을 최대한 주기 위하여 Orthonormal 투영 카메라를 사용하므로 보다 깔끔한 Outline을 위해 SceneNormal Texture는 Outline에서 사용하지 않았습니다. Pixelize는 전체 화면의 종횡비를 받아 설정한 크기의 Block으로 구획화하고, 각 블럭의 픽셀들의 색을 Gaussian/Box 블러링하는 방식으로 구현했습니다.
+
 ![Pixelizeb_a](https://github.com/user-attachments/assets/597aadc0-d09e-45ad-9b04-7b5737fd647a)
 
 2.에셋 구조 제작
@@ -268,10 +269,12 @@ Receipe는 레스토랑 경영 시스템에서 음식을 만들기 위해 필요
 ReceipeTree는 각 레시피들의 계층구조를 나타냅니다. 하위 레시피를 해금하고 싶으면, 그에 맞는 상위 레시피가 활성화되어 있어야합니다. ReceipeTree는 ReceipeTreeNode객체를 요소로 가지며, 게임 시작시 기본제공될 Receipe인 basicReceipes와 모든 ReceipeTreeNode들을 직렬화 하기위한 _node_Serialize_set 리스트를 가집니다. 기본적으로 ReceipeTree의 탐색은 BFS 알고리즘을 통하며, 각 탐색마다 호출될 수 있는 elementFindCallback을 파라미터로 제공합니다.
 
 또한 ReceipeTree는 용이한 수정을 위한 GraphView를 제공합니다.
+
 ![image](https://github.com/user-attachments/assets/ab534cf0-2c47-46f0-8c62-3beed4a13d1b)
 <Assets/Scripts/Editor/Graph/ReceipeTreeGraph>
 
 이를 통해 ReceipeTree 객체를 편하고 직관적으로 디자인할 수 있습니다.
+
 ![image](https://github.com/user-attachments/assets/59d74371-d494-42d5-9058-04408ec18c86)
 <Assets/Scripts/Editor/Graph/ReceipeTreeGraph/ReceipeTreeGraphWindow.cs>
 
