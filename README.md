@@ -342,7 +342,7 @@ InteractableObject is the base class for all objects that the player can interac
 
 ![image](https://github.com/user-attachments/assets/8ad9729e-2c67-4ece-8969-e8d338cc7f47)
 
-_<Interaction Progress Bar>_
+[Interaction ProgressBar]
 
 ### 3.3 Inventory
 
