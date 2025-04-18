@@ -5,7 +5,7 @@ ProjectB
 
 https://youtu.be/cdJTnnvfRNw
 
-_<Gameplay Video>_
+_<Gameplay>_
 
 ## 1.Rendering
 
