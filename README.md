@@ -3,9 +3,9 @@ ProjectB
 3D Farm Management Simulation Game Portfolio
 -----------------------------
 
-https://youtu.be/cdJTnnvfRNw
+Gameplay Video
 
-_<Gameplay>_
+https://youtu.be/cdJTnnvfRNw
 
 ## 1.Rendering
 
